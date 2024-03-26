@@ -75,26 +75,26 @@
               </div>
               <div class="modal-body p-5">
                   <h5 class="mb-3">Login with Email</h5>
-                  <form>
+                  <form action="login.php" method="POST">
                       <div class="mb-2">
-                          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter your email/username">
+                          <input type="text" class="form-control" name="userInput" placeholder="Enter your email/username/tallerID">
                       </div>
                       <div class="mb-3">
                          
-                        <select class="form-select" aria-label="Default select example">
+                        <select class="form-select" aria-label="Default select example" name="role">
                           <option selected>Select role</option>
-                          <option value="1">Administrator</option>
-                          <option value="2">Taller</option>
-                          <option value="3">Customer</option>
+                          <option value="administrator">Administrator</option>
+                          <option value="taller">Taller</option>
+                          <option value="customer">Customer</option>
                         </select>
                         </div>
                       <div class="mb-3">
-                          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter your password">
+                          <input type="password" class="form-control" name="password" placeholder="Enter your password">
                           <div class="mt-1 text-end">
                               <a href="auth-pass-reset-basic.html">Forgot password ?</a>
                           </div>
                       </div>
-                      <button type="submit" class="btn btn-primary w-100">Submit</button>
+                      <button type="submit" name="login" class="btn btn-primary w-100">Submit</button>
                   </form>
               </div>
           </div><!-- /.modal-content -->
@@ -111,42 +111,34 @@
             </div>
             
             <div class="modal-body">
-                <form>
+                <form action="signup.php" method="POST">
                     <div class="mb-3">
                         <label for="fullName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" placeholder="Enter your name">
+                        <input type="text" class="form-control" name="fullName" placeholder="Enter your name">
                     </div>
                     <div class="mb-3">
                         <label for="emailInput" class="form-label">Email address</label>
-                        <input type="email" class="form-control" id="emailInput" placeholder="Enter your email">
+                        <input type="email" class="form-control" name="email" placeholder="Enter your email">
                     </div>
                     <div class="mb-3">
                       <label for="emailInput" class="form-label">Phone Number</label>
-                      <input type="number" class="form-control" id="emailInput" placeholder="Enter your email">
+                      <input type="number" class="form-control" name="phone" placeholder="Enter your email">
                   </div>
-                    <div class="mb-3">
-                      <label for="emailInput" class="form-label">Role</label>
-                      <select class="form-select" aria-label="Default select example">
-                        <option selected>Select role</option>
-                        <option value="1">Administrator</option>
-                        <option value="2">Taller</option>
-                        <option value="3">Customer</option>
-                      </select>
-                      </div>
+                    
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter your password">
+                        <input type="password" class="form-control" name="password" placeholder="Enter your password">
                     </div>
                     <div class="mb-3">
                       <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
-                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter your password">
+                      <input type="password" class="form-control" name="confirmPassword" placeholder="Enter your password">
                   </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="checkTerms">
                         <label class="form-check-label" for="checkTerms">I agree to the <span class="fw-semibold">Terms of Service</span> and Privacy Policy</label>
                     </div>
                     <div class="text-end">
-                        <button type="submit" class="btn btn-primary">Sign Up Now</button>
+                        <button type="submit" class="btn btn-primary" name="signup">Sign Up Now</button>
                     </div>
                 </form>
             </div>
