@@ -54,7 +54,7 @@
           <li><button type="button" class="btn btn-primary getstarted scrollto" data-bs-toggle="modal" data-bs-target="#addTaller">
             <b>Add Taller</b>
           </button></li>
-          <li><a class="getstarted scrollto" href="#">Logout</a></li>
+          <li><a class="getstarted scrollto" href="logout.php">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -113,7 +113,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form action="add-taller.php" method="POST">
           <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Taller ID</label>
             <input type="number" class="form-control" name="tallerID" aria-describedby="emailHelp">
@@ -121,11 +121,11 @@
           </div>
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" name="password1">
+            <input type="password" class="form-control" name="password">
           </div>
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
-            <input type="password" class="form-control" name="confirmPassword1">
+            <input type="password" class="form-control" name="confirmPassword">
           </div>
          
           <button type="submit" class="btn btn-primary" name="addTaller">Submit</button>

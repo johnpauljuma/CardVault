@@ -39,7 +39,7 @@
             $checkQuery = "SELECT * FROM tallers WHERE tallerID = '$username'";
             $result = mysqli_query($conn, $checkQuery);
             $row = mysqli_fetch_assoc($result);
-            if ($row && hash('sha256', $password) === $row['password']) {
+            if (hash_equals($row['password'], hash('sha256', $password))) {
                 // Taller login successful, redirect user
                 $_SESSION['tallerID'] = $username;
                 header("Location: taller.html");

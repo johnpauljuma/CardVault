@@ -18,6 +18,7 @@
         }
 
 
+        // Hash the password using SHA-256
         $hashedPassword = hash('sha256', $password);
 
         $sql = "INSERT INTO tallers (tallerID, password) VALUES ('$tallerID', '$hashedPassword')";
