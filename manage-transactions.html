@@ -92,34 +92,38 @@
                                                                         </div>
                                                                         <div class="card-body">
                                                                              
-                                                                            <form id="custom-card-form" autocomplete="off">
+                                                                            <form id="custom-card-form" autocomplete="off" action="add-transaction.php" method="POST">
                                                                                 <div class="mb-3">
                                                                                     <label for="card-num-input" class="form-label">Transaction ID</label>
-                                                                                    <input id="card-num-input" class="form-control" maxlength="19" placeholder="0000" />
+                                                                                    <input name="transactionID" class="form-control" maxlength="19" placeholder="0000" />
                                                                                 </div>
                                                             
                                                                                 <div class="mb-3">
                                                                                     <label for="card-holder-input" class="form-label">Customer Name</label>
-                                                                                    <input type="text" class="form-control" id="card-holder-input" placeholder="Enter customer name" />
+                                                                                    <input type="text" class="form-control" name="customerName" placeholder="Enter customer name" />
                                                                                 </div>
                                                                                 <div class="mb-3">
                                                                                     <label for="card-holder-input" class="form-label">Card Number</label>
-                                                                                    <input type="text" class="form-control" id="card-holder-input" placeholder="Enter card number" />
+                                                                                      <input type="text" class="form-control" id="cardNumber" name="cardNumber" maxlength="19" placeholder="0000 0000 0000 0000" oninput="formatCardNumber(this)">
+                                                                                </div>
+                                                                                <div class="mb-3">
+                                                                                    <label for="card-holder-input" class="form-label">CVV</label>
+                                                                                    <input type="number" class="form-control" name="cvv" placeholder="Enter cvv" />
                                                                                 </div>
                                                                                 <div class="mb-3">
                                                                                     <label for="card-holder-input" class="form-label">Description</label>
-                                                                                    <input type="text" class="form-control" id="card-holder-input" placeholder="Enter description" />
+                                                                                    <input type="text" class="form-control" name="description" placeholder="Enter description" />
                                                                                 </div>
                                                                                 <div class="mb-3">
                                                                                     <label for="card-holder-input" class="form-label">Amount</label>
-                                                                                    <input type="text" class="form-control" id="card-holder-input" placeholder="Enter amount" />
+                                                                                    <input type="text" class="form-control" name="amount" placeholder="Enter amount" />
                                                                                 </div>
                                                                                 <div class="mb-3">
                                                                                     <label for="card-holder-input" class="form-label">Date</label>
-                                                                                    <input type="datetime-local" class="form-control" id="card-holder-input" placeholder="Enter holder name" />
+                                                                                    <input type="datetime-local" class="form-control" name="date" placeholder="Enter holder name" />
                                                                                 </div>
                                                             
-                                                                                <button class="btn btn-danger w-100 mt-3" type="submit">Add</button>
+                                                                                <button class="btn btn-danger w-100 mt-3" type="submit" name="addTransaction">Add</button>
                                                                             </form>
                                                                             <!-- end card form elem -->
                                                                         </div>
@@ -169,7 +173,18 @@
 
   </section><!-- End Hero -->
 
- 
+  <script>
+    function formatCardNumber(input) {
+      // Remove any non-numeric characters
+      let value = input.value.replace(/\D/g, '');
+      
+      // Add a white space every 4 digits
+      value = value.replace(/(.{4})/g, '$1 ');
+      
+      // Update the input value
+      input.value = value.trim();
+    }
+    </script>
   <!-- Vendor JS Files -->
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
