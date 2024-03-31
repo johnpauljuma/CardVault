@@ -29,7 +29,7 @@
             if ($row && hash('sha256', $password) === $row['password']) {
                 // Admin login successful, redirect user
                 $_SESSION['username'] = $username;
-                header("Location: administrator.html");
+                header("Location: administrator.php");
                 exit();
             } else {
                 $errorMessage = "Invalid username or password!";
@@ -42,7 +42,7 @@
             if (hash_equals($row['password'], hash('sha256', $password))) {
                 // Taller login successful, redirect user
                 $_SESSION['tallerID'] = $username;
-                header("Location: taller.html");
+                header("Location: taller.php");
                 exit();
             } else {
                 $errorMessage = "Invalid taller ID or password!";
@@ -55,7 +55,7 @@
             if ($row && hash('sha256', $password) === $row['password']) {
                 // Customer login successful, redirect user
                 $_SESSION['email'] = $email;
-                header("Location: customer.html");
+                header("Location: customer.php");
                 exit();
             } else {
                 $errorMessage = "Invalid email or password!";

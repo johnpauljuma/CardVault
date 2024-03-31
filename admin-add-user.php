@@ -22,7 +22,7 @@
         if ($password !== $confirmPassword) {
             echo "<script>
                     alert('Passwords do not match!');
-                    window.location.href = 'index.html';
+                    window.location.href = 'administrator.html';
                 </script>";
             exit();
         }
@@ -31,7 +31,7 @@
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "<script>
                     alert('Invalid email format!');
-                    window.location.href = 'index.html';
+                    window.location.href = 'administrator.html';
                 </script>";
             exit();
         }
@@ -45,7 +45,7 @@
             $errorMessage = mysqli_error($conn);
             echo "<script>
                     alert('Database Error: $errorMessage');
-                    window.location.href = 'index.html';
+                    window.location.href = 'administrator.php';
                 </script>";
             exit();
         }
@@ -54,7 +54,7 @@
             // Phone number already exists, return an error
             echo "<script>
                     alert('Phone Number already exists! Please check the Phone Number and try again...');
-                    window.location.href = 'index.html';
+                    window.location.href = 'administrator.php';
                 </script>";
             exit();
         }
@@ -69,15 +69,15 @@
         if (mysqli_query($conn, $sql)) {
             // Registration successful, redirect user to success page
             echo "<script>
-                    alert('Sign Up Successful!');
-                    window.location.href = 'customer.php';
+                    alert('User Added Successful!');
+                    window.location.href = 'administrator.php';
                 </script>";
             exit();
         } else {
             // Registration failed, display error message
             echo "<script>
                     alert('Error: " . mysqli_error($conn) . "');
-                    window.location.href = 'index.html';
+                    window.location.href = 'administrator.php';
                 </script>";
             exit();
         }

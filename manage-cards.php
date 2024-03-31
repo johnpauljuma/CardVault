@@ -1,3 +1,22 @@
+<?php
+  include 'config.php';
+
+  $key = "1234"; // Key for encryption
+  $iv = "1234123412341234"; 
+
+  // Function to decrypt data using AES decryption
+  function decrypt($data, $key, $iv) {
+    $cipher = "aes-128-cbc";
+    $options = OPENSSL_RAW_DATA;
+    $decryptedData = openssl_decrypt(base64_decode($data), $cipher, $key, $options, $iv);
+    return $decryptedData;
+  }
+  
+  $sql = "SELECT * FROM cards";
+  $result = $conn->query($sql);
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -131,29 +150,28 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 <!-- end card div elem -->
-                                                                            </div>
+                                                                            </div>                                                            
                                                             
-                                                            
-                                                                            <form id="custom-card-form" autocomplete="off">
+                                                                            <form id="custom-card-form" autocomplete="off" action="add-card.php" method="POST">
                                                                                 <div class="mb-3">
                                                                                     <label for="card-num-input" class="form-label">Card Number</label>
-                                                                                    <input id="card-num-input" class="form-control" maxlength="19" placeholder="0000 0000 0000 0000" />
+                                                                                    <input type="text" class="form-control" id="cardNumber" name="cardNumber" maxlength="19" placeholder="0000 0000 0000 0000" oninput="formatCardNumber(this)">
                                                                                 </div>
                                                             
                                                                                 <div class="mb-3">
                                                                                     <label for="card-holder-input" class="form-label">Card Holder</label>
-                                                                                    <input type="text" class="form-control" id="card-holder-input" placeholder="Enter holder name" />
+                                                                                    <input type="text" class="form-control" name="cardHolder" placeholder="Enter holder name" />
                                                                                 </div>
                                                                                 <div class="mb-3">
                                                                                     <label for="card-holder-input" class="form-label">Phone Number</label>
-                                                                                    <input type="text" class="form-control" id="card-holder-input" placeholder="Enter phone number" />
+                                                                                    <input type="text" class="form-control" name="phoneNumber" placeholder="Enter phone number" />
                                                                                 </div>
                                                             
-                                                                                <div class="row">
+                                                                                <div class="row mb-3">
                                                                                     <div class="col-lg-4">
                                                                                         <div>
                                                                                             <label for="expiry-month-input" class="form-label">Expiry Month</label>
-                                                                                            <select class="form-select" id="expiry-month-input">
+                                                                                            <select class="form-select" name="expiryMonth">
                                                                                                 <option></option>
                                                                                                 <option value="01">01</option>
                                                                                                 <option value="02">02</option>
@@ -175,12 +193,8 @@
                                                                                     <div class="col-lg-4">
                                                                                         <div>
                                                                                             <label for="expiry-year-input" class="form-label">Expiry Year</label>
-                                                                                            <select class="form-select" id="expiry-year-input">
-                                                                                                <option></option>
-                                                                                                <option value="2020">2020</option>
-                                                                                                <option value="2021">2021</option>
-                                                                                                <option value="2022">2022</option>
-                                                                                                <option value="2023">2023</option>
+                                                                                            <select class="form-select" name="expiryYear">
+                                                                                                <option></option>                                                                                                
                                                                                                 <option value="2024">2024</option>
                                                                                                 <option value="2025">2025</option>
                                                                                                 <option value="2026">2026</option>
@@ -188,6 +202,10 @@
                                                                                                 <option value="2028">2028</option>
                                                                                                 <option value="2029">2029</option>
                                                                                                 <option value="2030">2030</option>
+                                                                                                <option value="2031">2031</option>
+                                                                                                <option value="2032">2032</option>
+                                                                                                <option value="2033">2033</option>
+                                                                                                <option value="2034">2034</option>
                                                                                             </select>
                                                                                         </div>
                                                                                     </div>
@@ -195,15 +213,18 @@
                                                             
                                                                                     <div class="col-lg-4">
                                                                                         <div class="cvc">
-                                                                                            <label for="cvc-input" class="form-label">CVC</label>
-                                                                                            <input type="text" id="cvc-input" class="form-control" maxlength="3" />
+                                                                                            <label for="cvc-input" class="form-label">CVV</label>
+                                                                                            <input type="text" name="cvv" class="form-control" maxlength="3" />
                                                                                         </div>
                                                                                     </div>
                                                                                     <!-- end col -->
                                                                                 </div>
                                                                                 <!-- end row -->
-                                                            
-                                                                                <button class="btn btn-danger w-100 mt-3" type="submit">Add</button>
+                                                                                <div class="mb-3">
+                                                                                    <label for="card-holder-input" class="form-label">Balance</label>
+                                                                                    <input type="number" class="form-control" name="balance" placeholder="Enter card balance" />
+                                                                                </div>
+                                                                                <button class="btn btn-danger w-100 mt-3" type="submit" name="addCard">Add</button>
                                                                             </form>
                                                                             <!-- end card form elem -->
                                                                         </div>
@@ -236,13 +257,39 @@
                                         <th scope="col">Phone Number</th>
                                         <th scope="col">Expiry Month</th>
                                         <th scope="col">Expiry Year</th> 
-                                        <th scope="col">Balance</th>                
+                                        <th scope="col">Balance</th>  
+                                        <th scope="col">CVV</th>                
                                         <th scope="col">Action</th>
                                       </tr>
                                   </thead>
                                   <tbody>
-                                    
+                                  <?php
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            // Decrypt card number and CVV
+                                            $decryptedCardNumber = decrypt($row['cardNumber'], $key, $iv);
+                                            $decryptedCvv = decrypt($row['cvv'], $key, $iv);
+
+                                            echo "<tr>";
+                                            echo '<td>' . htmlspecialchars($decryptedCardNumber) . '</td>'; 
+                                            echo '<td>' . htmlspecialchars($row['cardHolder']) . '</td>';
+                                            echo '<td>' . htmlspecialchars($row['phone']) . '</td>';
+                                            echo '<td>' . htmlspecialchars($row['month']) . '</td>';
+                                            echo '<td>' . htmlspecialchars($row['year']) . '</td>';                                             
+                                            echo '<td>' . htmlspecialchars($row['balance']) . '</td>';
+                                            echo '<td>' . htmlspecialchars($decryptedCvv) . '</td>'; 
+                                            echo "<td><a href=''>Edit</a>     <button>Delete</button></td>";                                            
+                                            echo "</tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='8'>No data available</td></tr>";
+                                    }
+                                    //echo "<td><a href='edit_student_info.php?id=" . $row["id"] . "'>Edit</a></td>";
+                                    //echo "<td><button onclick='deleteCourse(" . $row["id"] . ")'>Delete</button></td>";
+                                    ?>
+                  
                                   </tbody>
+                                        
                             </table>
                         </div>
                     </div>
@@ -253,6 +300,18 @@
 
   </section><!-- End Hero -->
 
+  <script>
+    function formatCardNumber(input) {
+      // Remove any non-numeric characters
+      let value = input.value.replace(/\D/g, '');
+      
+      // Add a white space every 4 digits
+      value = value.replace(/(.{4})/g, '$1 ');
+      
+      // Update the input value
+      input.value = value.trim();
+    }
+    </script>
  
   <!-- Vendor JS Files -->
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>

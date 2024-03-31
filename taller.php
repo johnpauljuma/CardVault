@@ -49,7 +49,7 @@
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="getstarted scrollto" href="manage-transactions.html">Manage Transactions</a></li>
+          <li><a class="getstarted scrollto" href="manage-transactions.php">Manage Transactions</a></li>
           <li><a class="getstarted scrollto" href="logout.php">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>

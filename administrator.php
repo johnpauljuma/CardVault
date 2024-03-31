@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +6,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Card Vault Home</title>
+  <title>Card Vault Admin</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
@@ -47,9 +48,12 @@
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="getstarted scrollto" href="manage-cards.html">Manage Credit Cards</a></li>
+          <li><a class="getstarted scrollto" href="manage-cards.php">Manage Credit Cards</a></li>
           <li><button type="button" class="btn btn-primary getstarted scrollto" data-bs-toggle="modal" data-bs-target="#viewTransaction">
             <b>View Transaction</b>
+          </button></li>
+          <li><button type="button" class="btn btn-primary getstarted scrollto" data-bs-toggle="modal" data-bs-target="#addCustomer">
+            <b>Add User</b>
           </button></li>
           <li><button type="button" class="btn btn-primary getstarted scrollto" data-bs-toggle="modal" data-bs-target="#addTaller">
             <b>Add Taller</b>
@@ -77,7 +81,7 @@
       <div class="modal-body">
         <div class="card-body">
           <div class="table-responsive">
-              <table class="table table-success table-striped">
+              <table class="table table-success table-striped" id="cardTable">
                   <thead>
                       <tr>
                         <th scope="col">Transaction ID</th>
@@ -88,9 +92,8 @@
                         <th scope="col">Date</th>            
                       </tr>
                     </thead>
-                    <tbody>
-                      
-                    </tbody>
+                    <tbody id="cardTableBody">
+                    
               </table>
           </div>
       </div>
@@ -103,6 +106,50 @@
   </div>
 </div>
 
+<!-- ======= Add Customer Modal ======= -->
+<div id="addCustomer" class="modal" tabindex="-1" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 overflow-hidden">
+          <div class="modal-header p-3">
+              <h4 class="card-title mb-0">Sign Up</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          
+          <div class="modal-body">
+              <form action="admin-add-user.php" method="POST">
+                  <div class="mb-3">
+                      <label for="fullName" class="form-label">Full Name</label>
+                      <input type="text" class="form-control" name="fullName" placeholder="Enter your name">
+                  </div>
+                  <div class="mb-3">
+                      <label for="emailInput" class="form-label">Email address</label>
+                      <input type="email" class="form-control" name="email" placeholder="Enter your email">
+                  </div>
+                  <div class="mb-3">
+                    <label for="emailInput" class="form-label">Phone Number</label>
+                    <input type="number" class="form-control" name="phone" placeholder="Enter your email">
+                </div>
+                  
+                  <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label">Password</label>
+                      <input type="password" class="form-control" name="password" placeholder="Enter your password">
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" name="confirmPassword" placeholder="Enter your password">
+                </div>
+                  <div class="mb-3 form-check">
+                      <input type="checkbox" class="form-check-input" id="checkTerms">
+                      <label class="form-check-label" for="checkTerms">I agree to the <span class="fw-semibold">Terms of Service</span> and Privacy Policy</label>
+                  </div>
+                  <div class="text-end">
+                      <button type="submit" class="btn btn-primary" name="signup">Sign Up Now</button>
+                  </div>
+              </form>
+          </div>
+      </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <!-- Add Taller Modal -->
 <div class="modal fade" id="addTaller" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -164,7 +211,5 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-
 </body>
-
 </html>
