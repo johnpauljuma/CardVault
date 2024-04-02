@@ -43,7 +43,7 @@
             // Phone number does not exist, return an error
             echo "<script>
                     alert('Error! User not found!');
-                    window.location.href = 'manage-cards.php';
+                    window.location.href = 'customer-cards.php';
                 </script>";
             exit();
         }
@@ -51,18 +51,6 @@
         // Encrypt the card number and CVV using AES encryption        
         $encryptedCardNumber = mysqli_real_escape_string($conn, encrypt($cardNumber, $key, $iv));
         $encryptedCvv = mysqli_real_escape_string($conn, encrypt($cvv, $key, $iv));
-
-        // Check if the card number exists in the cards table
-        $cardQuery = "SELECT * FROM cards WHERE cardNumber = '$encryptedCardNumber'";
-        $cardResult = mysqli_query($conn, $cardQuery);
-
-        if (mysqli_num_rows($result) > 0) {
-            echo "<script>
-                    alert('Error! Card Number Already Exist!');
-                    window.location.href = 'manage-cards.php';
-                </script>";
-            exit();
-        }
 
         // Insert the card details into the cards table
         $sql = "INSERT INTO cards (cardNumber, cardHolder, phone, month, year, cvv, balance) 
@@ -82,14 +70,14 @@
             // Card insertion successful, redirect user to success page
             echo "<script>
                     alert('Card added successfully!');
-                    window.location.href = 'manage-cards.php';
+                    window.location.href = 'customer-cards.php';
                 </script>";
             exit();
         } else {
             // Card insertion failed, display error message
             echo "<script>
                     alert('Error: " . mysqli_error($conn) . "');
-                    window.location.href = 'manage-cards.php';
+                    window.location.href = 'customer-cards.php';
                 </script>";
             exit();
         }

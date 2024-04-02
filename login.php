@@ -35,26 +35,27 @@
                 $errorMessage = "Invalid username or password!";
             }
         }
-        elseif($role == 'taller'){
+        elseif($role == 'teller'){
             $checkQuery = "SELECT * FROM tallers WHERE tallerID = '$username'";
             $result = mysqli_query($conn, $checkQuery);
             $row = mysqli_fetch_assoc($result);
             if (hash_equals($row['password'], hash('sha256', $password))) {
                 // Taller login successful, redirect user
                 $_SESSION['tallerID'] = $username;
-                header("Location: taller.php");
+                header("Location: teller.php");
                 exit();
             } else {
                 $errorMessage = "Invalid taller ID or password!";
             }
         }
-        elseif($role == 'customer'){
+        elseif($role == 'customer'){           
             $checkQuery = "SELECT * FROM customers WHERE email = '$username'";
             $result = mysqli_query($conn, $checkQuery);
             $row = mysqli_fetch_assoc($result);
             if ($row && hash('sha256', $password) === $row['password']) {
                 // Customer login successful, redirect user
                 $_SESSION['email'] = $email;
+                $_SESSION['phone'] = $row['phone'];
                 header("Location: customer.php");
                 exit();
             } else {

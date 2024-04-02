@@ -67,6 +67,8 @@
 
         // Perform the insert operation
         if (mysqli_query($conn, $sql)) {
+            $_SESSION['email'] = $email;
+            $_SESSION['phone'] = $row['phone'];
             // Registration successful, redirect user to success page
             echo "<script>
                     alert('Sign Up Successful!');

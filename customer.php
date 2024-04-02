@@ -1,3 +1,54 @@
+<?php
+  include 'config.php';
+
+  session_start();
+
+  $phone = $_SESSION['phone'];
+
+  $key = "1234"; // Key for encryption
+  $iv = "1234123412341234"; 
+
+  // Function to decrypt data using AES decryption
+  function decrypt($data, $key, $iv) {
+      $cipher = "aes-128-cbc";
+      $options = OPENSSL_RAW_DATA;
+      $decryptedData = openssl_decrypt(base64_decode($data), $cipher, $key, $options, $iv);
+      return $decryptedData;
+  }
+
+  // Retrieve all card numbers related to the logged-in user
+  $cardQuery = "SELECT * FROM cards WHERE phone = '$phone'";
+  $cardResult = $conn->query($cardQuery);
+
+  if (!$cardResult) {
+    die('Error executing query: ' . $conn->error);
+  }
+
+  $encryptedCardNumbers = array();
+  if ($cardResult->num_rows > 0) {
+      while ($row = $cardResult->fetch_assoc()) {
+          // Store encrypted card number
+          $encryptedCardNumbers[] = $row['cardNumber'];
+      }
+  }
+
+  // Construct the IN clause with encrypted card numbers
+  $transactionIDs = "'" . implode("','", $encryptedCardNumbers) . "'";
+
+  // Query transactions related to the encrypted card numbers
+  $sql = "SELECT * FROM transactions WHERE cardNumber IN ($transactionIDs)";
+  $result = $conn->query($sql);
+
+  if (!$result) {
+    die('Error executing query: ' . $conn->error);
+  }
+  /*echo "<script>
+          alert('Decrypted Card Numbers: $cardNumbersString');
+          window.location.href = 'customer.php';
+      </script>";
+  exit();*/
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,7 +98,7 @@
 
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="getstarted scrollto" data-bs-toggle="modal" data-bs-target="#cardSettings" style="cursor: pointer;">Card Settings</a></li>
+          <li><a href="customer-cards.php" class="getstarted scrollto"  style="cursor: pointer;">Cards</a></li>
           <li><a class="getstarted scrollto" data-bs-toggle="modal" data-bs-target="#viewTransaction" style="cursor: pointer;">Transactions</a></li>
           <li><a class="getstarted scrollto" href="logout.php">Logout</a></li>
         </ul>
@@ -231,13 +282,34 @@
                         <th scope="col">Transaction ID</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Card Number</th>
+                        <th scope="col">CVV</th>
                         <th scope="col">Description</th>
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>            
                       </tr>
                     </thead>
                     <tbody>
-                      
+                    <?php
+                      if ($result->num_rows > 0) {
+                          while ($row = $result->fetch_assoc()) {
+                              // Decrypt card number and CVV
+                              $decryptedCardNumber = decrypt($row['cardNumber'], $key, $iv);
+                              $decryptedCvv = decrypt($row['cvv'], $key, $iv);
+
+                              echo "<tr>";                                            
+                              echo '<td>' . htmlspecialchars($row['transactionID']) . '</td>';
+                              echo '<td>' . htmlspecialchars($row['customerName']) . '</td>';
+                              echo '<td>' . htmlspecialchars($decryptedCardNumber) . '</td>'; 
+                              echo '<td>' . htmlspecialchars($decryptedCvv) . '</td>'; 
+                              echo '<td>' . htmlspecialchars($row['description']) . '</td>';
+                              echo '<td>' . htmlspecialchars($row['amount']) . '</td>';                                             
+                              echo '<td>' . htmlspecialchars($row['date']) . '</td>';     
+                              echo "</tr>";
+                          }
+                      } else {
+                          echo "<tr><td colspan='7'>No data available</td></tr>";
+                      }
+                      ?>
                     </tbody>
               </table>
           </div>

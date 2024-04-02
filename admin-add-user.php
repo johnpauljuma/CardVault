@@ -22,7 +22,7 @@
         if ($password !== $confirmPassword) {
             echo "<script>
                     alert('Passwords do not match!');
-                    window.location.href = 'administrator.html';
+                    window.location.href = 'administrator.php';
                 </script>";
             exit();
         }
@@ -31,7 +31,7 @@
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             echo "<script>
                     alert('Invalid email format!');
-                    window.location.href = 'administrator.html';
+                    window.location.href = 'administrator.php';
                 </script>";
             exit();
         }

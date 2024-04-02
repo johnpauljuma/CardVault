@@ -1,3 +1,20 @@
+<?php
+  include 'config.php';
+
+  $key = "1234"; // Key for encryption
+  $iv = "1234123412341234"; 
+
+  // Function to decrypt data using AES decryption
+  function decrypt($data, $key, $iv) {
+    $cipher = "aes-128-cbc";
+    $options = OPENSSL_RAW_DATA;
+    $decryptedData = openssl_decrypt(base64_decode($data), $cipher, $key, $options, $iv);
+    return $decryptedData;
+  }
+  
+  $sql = "SELECT * FROM transactions";
+  $result = $conn->query($sql);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -87,12 +104,36 @@
                         <th scope="col">Transaction ID</th>
                         <th scope="col">Customer Name</th>
                         <th scope="col">Card Number</th>
+                        <th scope="col">CVV</th>
                         <th scope="col">Description</th>
                         <th scope="col">Amount</th>
                         <th scope="col">Date</th>            
                       </tr>
                     </thead>
                     <tbody id="cardTableBody">
+                    <?php
+                      if ($result->num_rows > 0) {
+                          while ($row = $result->fetch_assoc()) {
+                              // Decrypt card number and CVV
+                              $decryptedCardNumber = decrypt($row['cardNumber'], $key, $iv);
+                              $decryptedCvv = decrypt($row['cvv'], $key, $iv);
+
+                              echo "<tr>";                                            
+                              echo '<td>' . htmlspecialchars($row['transactionID']) . '</td>';
+                              echo '<td>' . htmlspecialchars($row['customerName']) . '</td>';
+                              echo '<td>' . htmlspecialchars($decryptedCardNumber) . '</td>'; 
+                              echo '<td>' . htmlspecialchars($decryptedCvv) . '</td>'; 
+                              echo '<td>' . htmlspecialchars($row['description']) . '</td>';
+                              echo '<td>' . htmlspecialchars($row['amount']) . '</td>';                                             
+                              echo '<td>' . htmlspecialchars($row['date']) . '</td>';                                            
+                              echo "</tr>";
+                          }
+                      } else {
+                          echo "<tr><td colspan='8'>No data available</td></tr>";
+                      }
+                   
+                      ?>
+                    </tbody>
                     
               </table>
           </div>
